@@ -1,0 +1,18 @@
+mutation {
+    createPost(newPost: {
+        userId: "7fa1d398-1697-4545-8372-b0c1332cce6d"
+        teamId: "cc7980ed-b0fb-4118-847c-412a6dcc5fce"
+        today: ["testing 1"]
+        yesterday: ["testing 2"]
+        blocker: ["testing 3"]
+        posted: "1994-02-03T00:00:00Z"
+    }) {
+        id
+        userId
+        teamId
+        yesterday
+        today
+        blocker
+        posted
+    }
+}

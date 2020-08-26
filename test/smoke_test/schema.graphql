@@ -1,0 +1,55 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: QueryRoot
+    mutation: MutationRoot
+}
+
+type MutationRoot {
+    createPost(newPost: NewPost!): QueryPost!
+    deletePost(id: Uuid!): QueryPost
+    updatePost(updatePost: UpdatePost!): QueryPost!
+}
+
+"A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+type QueryPost {
+    blocker: [String!]!
+    id: Uuid
+    posted: DateTimeUtc!
+    teamId: Uuid!
+    today: [String!]!
+    userId: Uuid!
+    yesterday: [String!]!
+}
+
+type QueryRoot {
+    post(id: Uuid!): QueryPost
+}
+
+"A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+input NewPost {
+    blocker: [String!]!
+    posted: DateTimeUtc!
+    teamId: Uuid!
+    today: [String!]!
+    userId: Uuid!
+    yesterday: [String!]!
+}
+
+"A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+input UpdatePost {
+    blocker: [String!]!
+    id: Uuid!
+    posted: DateTimeUtc!
+    teamId: Uuid!
+    today: [String!]!
+    userId: Uuid!
+    yesterday: [String!]!
+}
+
+
+"DateTime"
+scalar DateTimeUtc
+
+"Uuid"
+scalar Uuid
