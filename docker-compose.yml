@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  keycloak:
+    image: jboss/keycloak:latest
+    command:
+      - -b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/standup-realm.json
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    ports:
+      - 8180:8080
+    volumes:
+      - "./config/idp/keycloak/:/opt/jboss/keycloak/imports"
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+volumes:
+  mongodb_data:
+
+
+#docker exec -it stand-up-service_keycloak_1 /opt/jboss/keycloak/bin/standalone.sh \
+#-Djboss.socket.binding.port-offset=100 -Dkeycloak.migration.action=export \
+#-Dkeycloak.migration.provider=singleFile \
+#-Dkeycloak.migration.realmName=master \
+#-Dkeycloak.migration.usersExportStrategy=REALM_FILE \
+#-Dkeycloak.migration.file=/tmp/standup-realm.json

@@ -1,0 +1,15 @@
+[package]
+name = "account"
+version = "0.1.0"
+authors = ["Benjamin Jacob Berg <benjaminjacobberg@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+uuid = { version = "0.7", features = ["serde", "v4"] }
+chrono = "0.4"
+custom_error = "1.7.1"
+serde = "1.0.103"
+serde_json = "1.0.44"
+serde_derive = "1.0.103"

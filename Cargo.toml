@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "client",
+    "server",
+    "repository",
+    "status",
+    "account",
+    "organization",
+]

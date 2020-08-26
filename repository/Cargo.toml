@@ -1,0 +1,18 @@
+[package]
+name = "repository"
+version = "0.1.0"
+authors = ["Benjamin Jacob Berg <benjaminjacobberg@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+status = { path = "../status", version = "0.1.0" }
+uuid = { version = "0.7", features = ["serde", "v4"] }
+chrono = "0.4"
+lazy_static = "1.4.0"
+
+[dependencies.mongodb]
+version = "1.1.0"
+default-features = false
+features = ["sync"]
