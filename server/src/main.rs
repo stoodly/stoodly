@@ -10,8 +10,8 @@ use juniper::http::{GraphQLRequest, GraphQLResponse};
 use juniper::DefaultScalarValue;
 use serde_json::error::Error as SerdeError;
 
-use repository::mongodb::establish_mongodb_connection;
-use repository::mongodb::status::post::PostRepository;
+// use repository::mongodb::establish_mongodb_connection;
+use repository::memory::status::post::PostRepository;
 use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
 use status::post::PostService;
 
@@ -38,7 +38,7 @@ async fn graphql(
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    let collection = establish_mongodb_connection("stoodly", "post");
+    // let collection = establish_mongodb_connection("stoodly", "post");
 
     env::set_var("RUST_LOG", "info");
     env_logger::init();
@@ -46,14 +46,14 @@ async fn main() -> io::Result<()> {
         let query_root = QueryRoot {
             post_service: PostService {
                 repository: PostRepository {
-                    collection: collection.clone(),
+                    // collection: collection.clone(),
                 },
             },
         };
         let mutation_root = MutationRoot {
             post_service: PostService {
                 repository: PostRepository {
-                    collection: collection.clone(),
+                    // collection: collection.clone(),
                 },
             },
         };

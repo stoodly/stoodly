@@ -1,0 +1,11 @@
+query {
+    post(id: "1108f202-0340-469c-87d1-321d379b02b9") {
+        id
+        userId
+        teamId
+        yesterday
+        today
+        blocker
+        posted
+    }
+}
