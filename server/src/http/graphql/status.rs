@@ -6,7 +6,7 @@ use status::post::Post;
 
 #[derive(GraphQLObject)]
 #[graphql(
-description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+    description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
 )]
 pub struct QueryPost {
     pub id: Option<Uuid>,
@@ -34,7 +34,7 @@ impl QueryPost {
 
 #[derive(GraphQLInputObject)]
 #[graphql(
-description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+    description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
 )]
 pub struct NewPost {
     pub user_id: Uuid,
@@ -61,7 +61,7 @@ impl NewPost {
 
 #[derive(GraphQLInputObject)]
 #[graphql(
-description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
+    description = "A Post is the abstraction of a team's user status by providing the answers to three simple questions"
 )]
 pub struct UpdatePost {
     pub id: Uuid,

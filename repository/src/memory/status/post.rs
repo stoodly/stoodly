@@ -1,8 +1,8 @@
 use lazy_static::lazy_static;
+use status::post::{Post, Repository};
 use std::error::Error;
 use std::sync::{Mutex, MutexGuard};
 use uuid::Uuid;
-use status::post::{Post, Repository};
 
 lazy_static! {
     static ref COLLECTION: Mutex<Vec<Post>> = Mutex::new(vec![]);

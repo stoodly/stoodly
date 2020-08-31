@@ -1,5 +1,5 @@
-use mongodb::sync::{Client, Collection, Database};
 use mongodb::error::Error;
+use mongodb::sync::{Client, Collection, Database};
 
 pub mod account;
 pub mod status;

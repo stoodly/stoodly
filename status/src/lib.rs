@@ -1,5 +1,5 @@
-use std::error::Error;
 use custom_error::custom_error;
+use std::error::Error;
 use uuid::Uuid;
 
 use account::user::{Service as UserService, User};

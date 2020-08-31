@@ -2,17 +2,17 @@ use std::env;
 use std::io;
 use std::sync::Arc;
 
-use actix_web::{App, HttpResponse, HttpServer, middleware, web::Data};
 use actix_web::error::BlockingError;
-use actix_web::web::{block, get, Json, post, resource};
-use juniper::DefaultScalarValue;
-use juniper::http::{GraphQLRequest, GraphQLResponse};
+use actix_web::web::{block, get, post, resource, Json};
+use actix_web::{middleware, web::Data, App, HttpResponse, HttpServer};
 use juniper::http::graphiql::graphiql_source;
+use juniper::http::{GraphQLRequest, GraphQLResponse};
+use juniper::DefaultScalarValue;
 use serde_json::error::Error as SerdeError;
 
 use repository::mongodb::establish_mongodb_connection;
 use repository::mongodb::status::post::PostRepository;
-use server::http::graphql::schema::{MutationRoot, QueryRoot, Schema, schema};
+use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
 use status::post::PostService;
 
 async fn graphiql() -> HttpResponse {
@@ -30,7 +30,7 @@ async fn graphql(
         let res: GraphQLResponse<DefaultScalarValue> = data.execute(&st, &());
         Ok::<_, SerdeError>(serde_json::to_string(&res)?)
     })
-        .await?;
+    .await?;
     Ok(HttpResponse::Ok()
         .content_type("application/json")
         .body(user))
@@ -64,7 +64,7 @@ async fn main() -> io::Result<()> {
             .service(resource("/graphql").route(post().to(graphql)))
             .service(resource("/graphiql").route(get().to(graphiql)))
     })
-        .bind("localhost:8080")?
-        .run()
-        .await
+    .bind("localhost:8080")?
+    .run()
+    .await
 }
