@@ -10,7 +10,7 @@ TODO
 
 - [ ] Setup IDP, authentication, and read JWT into the service.
 
-- [ ] Break out project into a multi-crate project.
+- [x] Break out project into a multi-crate project.
 
         Project:
         * Stoodly        
