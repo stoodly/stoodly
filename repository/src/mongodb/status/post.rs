@@ -1,10 +1,9 @@
 use std::error::Error;
 
-use mongodb::bson::{doc, Bson, Document};
-use mongodb::{options::UpdateOptions, sync::Collection};
-use uuid::Uuid;
-
 use chrono::{TimeZone, Utc};
+use mongodb::{options::UpdateOptions, sync::Collection};
+use mongodb::bson::{Bson, doc, Document};
+use uuid::Uuid;
 
 use status::post::{Post, Repository};
 
@@ -62,40 +61,43 @@ impl Repository for PostRepository {
 }
 
 fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
-    let id: &str = document.get("_id").and_then(Bson::as_str).expect("_id");
+    let id: &str = document.get("_id").and_then(Bson::as_str).ok_or("_id")?;
     let user_id: &str = document
         .get("user_id")
         .and_then(Bson::as_str)
-        .expect("user_id");
+        .ok_or("user_id")?;
     let team_id: &str = document
         .get("team_id")
         .and_then(Bson::as_str)
-        .expect("team_id");
+        .ok_or("team_id")?;
     let yesterday: Vec<String> = document
         .get("yesterday")
         .and_then(Bson::as_array)
-        .expect("yesterday")
+        .ok_or("yesterday")?
         .iter()
-        .map(|bson| bson.as_str().expect("yesterday's value").to_string())
+        .map(|bson| bson.as_str().map(|v| v.to_string()))
+        .flatten()
         .collect();
     let today: Vec<String> = document
         .get("today")
         .and_then(Bson::as_array)
-        .expect("today")
+        .ok_or("today")?
         .iter()
-        .map(|bson| bson.as_str().expect("today's value").to_string())
+        .map(|bson| bson.as_str().map(|v| v.to_string()))
+        .flatten()
         .collect();
     let blocker: Vec<String> = document
         .get("blocker")
         .and_then(Bson::as_array)
-        .expect("blocker")
+        .ok_or("blocker")?
         .iter()
-        .map(|bson| bson.as_str().expect("blocker's value").to_string())
+        .map(|bson| bson.as_str().map(|v| v.to_string()))
+        .flatten()
         .collect();
     let posted = document
         .get("posted")
         .and_then(Bson::as_i64)
-        .expect("posted");
+        .ok_or("posted")?;
     let post: Post = Post {
         id: Some(Uuid::parse_str(id)?),
         user_id: Uuid::parse_str(user_id)?,

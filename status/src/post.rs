@@ -68,7 +68,7 @@ impl<R: Repository> Service for PostService<R> {
         fn validate(post: Post) -> Result<Post, Box<dyn Error>> {
             if post.id.is_none() {
                 Err(PostError::IdIsNone.into())
-            } else if post.id.expect("expected ID").is_nil() {
+            } else if post.id.ok_or("expected ID")?.is_nil() {
                 Err(PostError::InvalidId.into())
             } else {
                 Ok(post)

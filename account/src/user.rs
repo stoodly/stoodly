@@ -63,7 +63,7 @@ impl<R: Repository> Service for UserService<R> {
         fn validate(user: User) -> Result<User, Box<dyn Error>> {
             if user.id.is_none() {
                 Err(UserError::IdIsNone.into())
-            } else if user.id.expect("expected ID").is_nil() {
+            } else if user.id.ok_or("expected ID")?.is_nil() {
                 Err(UserError::InvalidId.into())
             } else {
                 Ok(user)

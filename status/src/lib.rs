@@ -38,8 +38,8 @@ pub struct StatusService<P: PostService, U: UserService, T: TeamService> {
 impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P, U, T> {
     fn create(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
         fn permission(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.expect("expected 'user' ID");
-            let team_uuid: Uuid = team.id.expect("expected 'team' ID");
+            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
+            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
             let user_mismatch_check: bool = user_uuid != post.user_id;
             let not_team_member_check: bool = !team.members.contains(&user_uuid);
             let team_mismatch_check: bool = team_uuid != post.team_id;
@@ -69,8 +69,8 @@ impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P
 
     fn read(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
         fn permission(post: Post, user: User, team: Team) -> Result<Option<Post>, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.expect("expected 'user' ID");
-            let team_uuid: Uuid = team.id.expect("expected 'team' ID");
+            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
+            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
             let user_mismatch_check: bool = user_uuid != post.user_id;
             let not_team_member_check: bool = !team.members.contains(&user_uuid);
             let team_mismatch_check: bool = team_uuid != post.team_id;
@@ -104,8 +104,8 @@ impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P
 
     fn update(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
         fn permission(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.expect("expected 'user' ID");
-            let team_uuid: Uuid = team.id.expect("expected 'team' ID");
+            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
+            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
             let user_mismatch_check: bool = user_uuid != post.user_id;
             let not_team_member_check: bool = !team.members.contains(&user_uuid);
             let team_mismatch_check: bool = team_uuid != post.team_id;
@@ -135,9 +135,9 @@ impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P
 
     fn delete(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
         fn permission(post: Post, user: User, team: Team) -> Result<Uuid, Box<dyn Error>> {
-            let post_uuid: Uuid = post.id.expect("expected 'post' ID");
-            let user_uuid: Uuid = user.id.expect("expected 'user' ID");
-            let team_uuid: Uuid = team.id.expect("expected 'team' ID");
+            let post_uuid: Uuid = post.id.ok_or("expected 'post' ID")?;
+            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
+            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
             let user_mismatch_check: bool = user_uuid != post.user_id;
             let not_team_member_check: bool = !team.members.contains(&user_uuid);
             let team_mismatch_check: bool = team_uuid != post.team_id;

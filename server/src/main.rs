@@ -10,7 +10,7 @@ use juniper::http::{GraphQLRequest, GraphQLResponse};
 use juniper::DefaultScalarValue;
 use serde_json::error::Error as SerdeError;
 
-// use repository::mongodb::establish_mongodb_connection;
+use repository::mongodb::establish_mongodb_connection;
 use repository::memory::status::post::PostRepository;
 use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
 use status::post::PostService;
@@ -38,7 +38,7 @@ async fn graphql(
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    // let collection = establish_mongodb_connection("stoodly", "post");
+    let _collection = establish_mongodb_connection("stoodly", "post").expect("expected 'post' collection in the 'stoodly' db");
 
     env::set_var("RUST_LOG", "info");
     env_logger::init();
