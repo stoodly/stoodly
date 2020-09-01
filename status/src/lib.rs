@@ -10,7 +10,7 @@ use crate::post::{Post, Service as PostService};
 pub mod post;
 
 custom_error! {
-    pub PermissionError
+    pub SecurityError
     NotTeamMember = "The 'User' entity is not a member of the retrieved 'Team' entity.",
     UserMismatch = "The user_id in the 'Post' entity does not match the id on the 'User' entity.",
     TeamMismatch = "The team_id in the 'Post' entity does not match the id on the 'Team' entity.",
@@ -81,11 +81,11 @@ fn security_check(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Er
     let team_mismatch_check: bool = team_uuid != post.team_id;
 
     if user_mismatch_check {
-        Err(PermissionError::UserMismatch.into())
+        Err(SecurityError::UserMismatch.into())
     } else if not_team_member_check {
-        Err(PermissionError::NotTeamMember.into())
+        Err(SecurityError::NotTeamMember.into())
     } else if team_mismatch_check {
-        Err(PermissionError::TeamMismatch.into())
+        Err(SecurityError::TeamMismatch.into())
     } else {
         Ok(post)
     }
