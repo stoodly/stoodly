@@ -37,135 +37,56 @@ pub struct StatusService<P: PostService, U: UserService, T: TeamService> {
 
 impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P, U, T> {
     fn create(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
-        fn permission(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
-            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
-            let user_mismatch_check: bool = user_uuid != post.user_id;
-            let not_team_member_check: bool = !team.members.contains(&user_uuid);
-            let team_mismatch_check: bool = team_uuid != post.team_id;
+        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
 
-            if user_mismatch_check {
-                Err(PermissionError::UserMismatch.into())
-            } else if not_team_member_check {
-                Err(PermissionError::NotTeamMember.into())
-            } else if team_mismatch_check {
-                Err(PermissionError::TeamMismatch.into())
-            } else {
-                Ok(post)
-            }
-        }
-
-        let user: User = match self.user_service.read(user_id)? {
-            None => return Err(NotFoundError::UserNotFound.into()),
-            Some(user) => user,
-        };
-        let team: Team = match self.team_service.read(post.team_id)? {
-            None => return Err(NotFoundError::TeamNotFound.into()),
-            Some(team) => team,
-        };
-
-        self.post_service.create(permission(post, user, team)?)
+        self.post_service.create(security_check(post, user, team)?)
     }
 
     fn read(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
-        fn permission(post: Post, user: User, team: Team) -> Result<Option<Post>, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
-            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
-            let user_mismatch_check: bool = user_uuid != post.user_id;
-            let not_team_member_check: bool = !team.members.contains(&user_uuid);
-            let team_mismatch_check: bool = team_uuid != post.team_id;
-
-            if user_mismatch_check {
-                Err(PermissionError::UserMismatch.into())
-            } else if not_team_member_check {
-                Err(PermissionError::NotTeamMember.into())
-            } else if team_mismatch_check {
-                Err(PermissionError::TeamMismatch.into())
-            } else {
-                Ok(Some(post))
-            }
-        }
-
         let post: Post = match self.post_service.read(id)? {
             None => return Ok(None),
             Some(post) => post,
         };
-        let user: User = match self.user_service.read(user_id)? {
-            None => return Err(NotFoundError::UserNotFound.into()),
-            Some(user) => user,
-        };
-        let team: Team = match self.team_service.read(post.team_id)? {
-            None => return Err(NotFoundError::TeamNotFound.into()),
-            Some(team) => team,
-        };
+        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
 
-        permission(post, user, team)
+        security_check(post, user, team).map(|p| Some(p))
     }
 
     fn update(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
-        fn permission(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Error>> {
-            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
-            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
-            let user_mismatch_check: bool = user_uuid != post.user_id;
-            let not_team_member_check: bool = !team.members.contains(&user_uuid);
-            let team_mismatch_check: bool = team_uuid != post.team_id;
+        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
 
-            if user_mismatch_check {
-                Err(PermissionError::UserMismatch.into())
-            } else if not_team_member_check {
-                Err(PermissionError::NotTeamMember.into())
-            } else if team_mismatch_check {
-                Err(PermissionError::TeamMismatch.into())
-            } else {
-                Ok(post)
-            }
-        }
-
-        let user: User = match self.user_service.read(user_id)? {
-            None => return Err(NotFoundError::UserNotFound.into()),
-            Some(user) => user,
-        };
-        let team: Team = match self.team_service.read(post.team_id)? {
-            None => return Err(NotFoundError::TeamNotFound.into()),
-            Some(team) => team,
-        };
-
-        self.post_service.update(permission(post, user, team)?)
+        self.post_service.update(security_check(post, user, team)?)
     }
 
     fn delete(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
-        fn permission(post: Post, user: User, team: Team) -> Result<Uuid, Box<dyn Error>> {
-            let post_uuid: Uuid = post.id.ok_or("expected 'post' ID")?;
-            let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
-            let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
-            let user_mismatch_check: bool = user_uuid != post.user_id;
-            let not_team_member_check: bool = !team.members.contains(&user_uuid);
-            let team_mismatch_check: bool = team_uuid != post.team_id;
-
-            if user_mismatch_check {
-                Err(PermissionError::UserMismatch.into())
-            } else if not_team_member_check {
-                Err(PermissionError::NotTeamMember.into())
-            } else if team_mismatch_check {
-                Err(PermissionError::TeamMismatch.into())
-            } else {
-                Ok(post_uuid)
-            }
-        }
-
         let post: Post = match self.post_service.read(id)? {
             None => return Ok(None),
             Some(post) => post,
         };
-        let user: User = match self.user_service.read(user_id)? {
-            None => return Err(NotFoundError::UserNotFound.into()),
-            Some(user) => user,
-        };
-        let team: Team = match self.team_service.read(post.team_id)? {
-            None => return Err(NotFoundError::TeamNotFound.into()),
-            Some(team) => team,
-        };
+        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
 
-        self.post_service.delete(permission(post, user, team)?)
+        self.post_service.delete(security_check(post, user, team)?.id.ok_or("expected 'post' ID")?)
+    }
+}
+
+fn security_check(post: Post, user: User, team: Team) -> Result<Post, Box<dyn Error>> {
+    let user_uuid: Uuid = user.id.ok_or("expected 'user' ID")?;
+    let team_uuid: Uuid = team.id.ok_or("expected 'team' ID")?;
+    let user_mismatch_check: bool = user_uuid != post.user_id;
+    let not_team_member_check: bool = !team.members.contains(&user_uuid);
+    let team_mismatch_check: bool = team_uuid != post.team_id;
+
+    if user_mismatch_check {
+        Err(PermissionError::UserMismatch.into())
+    } else if not_team_member_check {
+        Err(PermissionError::NotTeamMember.into())
+    } else if team_mismatch_check {
+        Err(PermissionError::TeamMismatch.into())
+    } else {
+        Ok(post)
     }
 }
