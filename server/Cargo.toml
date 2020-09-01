@@ -13,7 +13,7 @@ organization = { path = "../organization", version = "0.1.0" }
 repository = { path = "../repository", version = "0.1.0" }
 uuid = { version = "0.7", features = ["serde", "v4"] }
 chrono = "0.4"
-env_logger = "0.5.11"
+env_logger = "0.7.1"
 log = "0.4.3"
 serde = "1.0.103"
 serde_json = "1.0.44"
