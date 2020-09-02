@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 account = { path = "../account", version = "0.1.0" }
 organization = { path = "../organization", version = "0.1.0" }
-uuid = { version = "0.7", features = ["serde", "v4"] }
+uuid = { version = "0.8", features = ["serde", "v4"] }
 chrono = "0.4"
 custom_error = "1.7.1"
 serde = "1.0.103"

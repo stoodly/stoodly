@@ -11,13 +11,24 @@ status = { path = "../status", version = "0.1.0" }
 account = { path = "../account", version = "0.1.0" }
 organization = { path = "../organization", version = "0.1.0" }
 repository = { path = "../repository", version = "0.1.0" }
-uuid = { version = "0.7", features = ["serde", "v4"] }
+uuid = { version = "0.8", features = ["serde", "v4"] }
 chrono = "0.4"
-env_logger = "0.5.11"
-log = "0.4.3"
 serde = "1.0.103"
 serde_json = "1.0.44"
 serde_derive = "1.0.103"
 actix-web = "2.0.0"
 actix-rt = "1.0.0"
-juniper = { version = "0.14.2", features = ["uuid"] }
+#juniper = { version = "0.14.2", features = ["uuid"] }
+actix-cors = "0.2.0"
+actix-identity = "0.2.1"
+env_logger = "0.7"
+log = "0.4.3"
+
+[dependencies.juniper]
+git = "https://github.com/graphql-rust/juniper"
+branch = "master"
+
+[dependencies.juniper_actix]
+git = "https://github.com/graphql-rust/juniper"
+branch = "master"
+

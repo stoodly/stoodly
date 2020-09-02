@@ -1,39 +1,29 @@
 use std::env;
 use std::io;
-use std::sync::Arc;
 
-use actix_web::error::BlockingError;
-use actix_web::web::{block, get, post, resource, Json};
-use actix_web::{middleware, web::Data, App, HttpResponse, HttpServer};
-use juniper::http::graphiql::graphiql_source;
-use juniper::http::{GraphQLRequest, GraphQLResponse};
-use juniper::DefaultScalarValue;
-use serde_json::error::Error as SerdeError;
+use actix_cors::Cors;
+use actix_web::{App, Error, HttpResponse, HttpServer, middleware, web};
+use juniper_actix::{graphql_handler, playground_handler, graphiql_handler};
 
-use repository::mongodb::establish_mongodb_connection;
 use repository::memory::status::post::PostRepository;
-use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
+use repository::mongodb::establish_mongodb_connection;
+use server::http::graphql::schema::{MutationRoot, QueryRoot, schema, Schema};
 use status::post::PostService;
 
-async fn graphiql() -> HttpResponse {
-    let html: String = graphiql_source("http://localhost:8080/graphql");
-    HttpResponse::Ok()
-        .content_type("text/html; charset=utf-8")
-        .body(html)
+async fn graphiql() -> Result<HttpResponse, Error> {
+    graphiql_handler("/", None).await
+}
+
+async fn playground() -> Result<HttpResponse, Error> {
+    playground_handler("/", None).await
 }
 
 async fn graphql(
-    st: Data<Arc<Schema<PostService<PostRepository>>>>,
-    data: Json<GraphQLRequest>,
-) -> Result<HttpResponse, BlockingError<SerdeError>> {
-    let user: String = block(move || {
-        let res: GraphQLResponse<DefaultScalarValue> = data.execute(&st, &());
-        Ok::<_, SerdeError>(serde_json::to_string(&res)?)
-    })
-    .await?;
-    Ok(HttpResponse::Ok()
-        .content_type("application/json")
-        .body(user))
+    req: actix_web::HttpRequest,
+    payload: actix_web::web::Payload,
+    schema: web::Data<Schema<PostService<PostRepository>>>,
+) -> Result<HttpResponse, Error> {
+    graphql_handler(&schema, &(), req, payload).await
 }
 
 #[actix_rt::main]
@@ -58,13 +48,25 @@ async fn main() -> io::Result<()> {
             },
         };
         App::new()
-            .data(Arc::new(schema(query_root, mutation_root)))
+            .data(schema(query_root, mutation_root))
             .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
-            .service(resource("/graphql").route(post().to(graphql)))
-            .service(resource("/graphiql").route(get().to(graphiql)))
+            .wrap(
+                Cors::new()
+                    .allowed_methods(vec!["POST", "GET"])
+                    .supports_credentials()
+                    .max_age(3600)
+                    .finish(),
+            )
+            .service(
+                web::resource("/graphql")
+                    .route(web::post().to(graphql))
+                    .route(web::get().to(graphql)),
+            )
+            .service(web::resource("/playground").route(web::get().to(playground)))
+            .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-    .bind("localhost:8080")?
-    .run()
-    .await
+        .bind("localhost:8080")?
+        .run()
+        .await
 }

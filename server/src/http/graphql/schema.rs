@@ -1,4 +1,4 @@
-use juniper::FieldResult;
+use juniper::{FieldResult, EmptySubscription};
 use juniper::RootNode;
 use uuid::Uuid;
 
@@ -10,7 +10,7 @@ pub struct QueryRoot<P: Service> {
     pub post_service: P,
 }
 
-#[juniper::object]
+#[juniper::graphql_object]
 impl<P: Service> QueryRoot<P> {
     fn post(&self, id: Uuid) -> FieldResult<Option<QueryPost>> {
         fn mk_query_post(post: Option<Post>) -> Option<QueryPost> {
@@ -30,7 +30,7 @@ pub struct MutationRoot<P: Service> {
     pub post_service: P,
 }
 
-#[juniper::object]
+#[juniper::graphql_object]
 impl<P: Service> MutationRoot<P> {
     fn create_post(&self, new_post: NewPost) -> FieldResult<QueryPost> {
         match self.post_service.create(NewPost::from_new_post(&new_post)) {
@@ -63,8 +63,8 @@ impl<P: Service> MutationRoot<P> {
     }
 }
 
-pub type Schema<P> = RootNode<'static, QueryRoot<P>, MutationRoot<P>>;
+pub type Schema<P> = RootNode<'static, QueryRoot<P>, MutationRoot<P>, EmptySubscription>;
 
 pub fn schema<P: Service>(query: QueryRoot<P>, mutation: MutationRoot<P>) -> Schema<P> {
-    Schema::new(query, mutation)
+    Schema::new(query, mutation, EmptySubscription::new())
 }

@@ -6,6 +6,7 @@
       "Default GraphQL Endpoint": {
         "url": "http://localhost:8080/graphql",
         "headers": {
+          "content-type": "application/json",
           "user-agent": "JS GraphQL"
         },
         "introspect": true
