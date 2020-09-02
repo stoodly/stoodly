@@ -5,7 +5,7 @@ use actix_cors::Cors;
 use actix_web::{App, Error, HttpResponse, HttpServer, middleware, web};
 use juniper_actix::{graphql_handler, playground_handler, graphiql_handler};
 
-use repository::memory::status::post::PostRepository;
+use repository::mongodb::status::post::PostRepository;
 use repository::mongodb::establish_mongodb_connection;
 use server::http::graphql::schema::{MutationRoot, QueryRoot, schema, Schema};
 use status::post::PostService;
@@ -28,7 +28,7 @@ async fn graphql(
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    let _collection = establish_mongodb_connection("stoodly", "post").expect("expected 'post' collection in the 'stoodly' db");
+    let collection = establish_mongodb_connection("stoodly", "post").expect("expected 'post' collection in the 'stoodly' db");
 
     env::set_var("RUST_LOG", "info");
     env_logger::init();
@@ -36,14 +36,14 @@ async fn main() -> io::Result<()> {
         let query_root = QueryRoot {
             post_service: PostService {
                 repository: PostRepository {
-                    // collection: collection.clone(),
+                    collection: collection.clone(),
                 },
             },
         };
         let mutation_root = MutationRoot {
             post_service: PostService {
                 repository: PostRepository {
-                    // collection: collection.clone(),
+                    collection: collection.clone(),
                 },
             },
         };
