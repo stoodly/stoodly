@@ -6,20 +6,7 @@ services:
       - "8080:8080"
       - "80:80"
     depends_on:
-      - keycloak
       - mongodb
-  keycloak:
-    image: jboss/keycloak:latest
-    command:
-      - -b 0.0.0.0 -Dkeycloak.import=/opt/jboss/keycloak/imports/standup-realm.json
-    environment:
-      DB_VENDOR: h2
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-    ports:
-      - 8180:8080
-    volumes:
-      - "./config/idp/keycloak/:/opt/jboss/keycloak/imports"
   mongodb:
     image: mongo:latest
     environment:

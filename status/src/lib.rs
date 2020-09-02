@@ -37,8 +37,14 @@ pub struct StatusService<P: PostService, U: UserService, T: TeamService> {
 
 impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P, U, T> {
     fn create(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
-        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
-        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
+        let user: User = self
+            .user_service
+            .read(user_id)?
+            .ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self
+            .team_service
+            .read(post.team_id)?
+            .ok_or(NotFoundError::TeamNotFound)?;
 
         self.post_service.create(security_check(post, user, team)?)
     }
@@ -48,15 +54,27 @@ impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P
             None => return Ok(None),
             Some(post) => post,
         };
-        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
-        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
+        let user: User = self
+            .user_service
+            .read(user_id)?
+            .ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self
+            .team_service
+            .read(post.team_id)?
+            .ok_or(NotFoundError::TeamNotFound)?;
 
         security_check(post, user, team).map(|p| Some(p))
     }
 
     fn update(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>> {
-        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
-        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
+        let user: User = self
+            .user_service
+            .read(user_id)?
+            .ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self
+            .team_service
+            .read(post.team_id)?
+            .ok_or(NotFoundError::TeamNotFound)?;
 
         self.post_service.update(security_check(post, user, team)?)
     }
@@ -66,10 +84,20 @@ impl<P: PostService, U: UserService, T: TeamService> Service for StatusService<P
             None => return Ok(None),
             Some(post) => post,
         };
-        let user: User = self.user_service.read(user_id)?.ok_or(NotFoundError::UserNotFound)?;
-        let team: Team = self.team_service.read(post.team_id)?.ok_or(NotFoundError::TeamNotFound)?;
+        let user: User = self
+            .user_service
+            .read(user_id)?
+            .ok_or(NotFoundError::UserNotFound)?;
+        let team: Team = self
+            .team_service
+            .read(post.team_id)?
+            .ok_or(NotFoundError::TeamNotFound)?;
 
-        self.post_service.delete(security_check(post, user, team)?.id.ok_or("expected 'post' ID")?)
+        self.post_service.delete(
+            security_check(post, user, team)?
+                .id
+                .ok_or("expected 'post' ID")?,
+        )
     }
 }
 

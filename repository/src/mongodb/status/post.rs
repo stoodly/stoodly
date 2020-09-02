@@ -1,8 +1,8 @@
 use std::error::Error;
 
 use chrono::{TimeZone, Utc};
+use mongodb::bson::{doc, Bson, Document};
 use mongodb::{options::UpdateOptions, sync::Collection};
-use mongodb::bson::{Bson, doc, Document};
 use uuid::Uuid;
 
 use status::post::{Post, Repository};

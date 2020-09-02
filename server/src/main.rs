@@ -2,12 +2,12 @@ use std::env;
 use std::io;
 
 use actix_cors::Cors;
-use actix_web::{App, Error, HttpResponse, HttpServer, middleware, web};
-use juniper_actix::{graphql_handler, playground_handler, graphiql_handler};
+use actix_web::{middleware, web, App, Error, HttpResponse, HttpServer};
+use juniper_actix::{graphiql_handler, graphql_handler, playground_handler};
 
-use repository::mongodb::status::post::PostRepository;
 use repository::mongodb::establish_mongodb_connection;
-use server::http::graphql::schema::{MutationRoot, QueryRoot, schema, Schema};
+use repository::mongodb::status::post::PostRepository;
+use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
 use status::post::PostService;
 
 async fn graphiql() -> Result<HttpResponse, Error> {
@@ -28,7 +28,8 @@ async fn graphql(
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    let collection = establish_mongodb_connection("stoodly", "post").expect("expected 'post' collection in the 'stoodly' db");
+    let collection = establish_mongodb_connection("stoodly", "post")
+        .expect("expected 'post' collection in the 'stoodly' db");
 
     env::set_var("RUST_LOG", "info");
     env_logger::init();
@@ -66,7 +67,7 @@ async fn main() -> io::Result<()> {
             .service(web::resource("/playground").route(web::get().to(playground)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-        .bind("localhost:8080")?
-        .run()
-        .await
+    .bind("localhost:8080")?
+    .run()
+    .await
 }
