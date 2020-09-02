@@ -1431,7 +1431,7 @@ dependencies = [
 
 [[package]]
 name = "mongodb"
-version = "1.1.0"
+version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "async-std 1.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1802,7 +1802,7 @@ version = "0.1.0"
 dependencies = [
  "chrono 0.4.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "mongodb 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "mongodb 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "status 0.1.0",
  "uuid 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -2745,7 +2745,7 @@ dependencies = [
 "checksum mio 0.6.22 (registry+https://github.com/rust-lang/crates.io-index)" = "fce347092656428bc8eaf6201042cb551b8d67855af7374542a92a0fbfcac430"
 "checksum mio-uds 0.6.8 (registry+https://github.com/rust-lang/crates.io-index)" = "afcb699eb26d4332647cc848492bbc15eafb26f08d0304550d5aa1f612e066f0"
 "checksum miow 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "8c1f2f3b1cf331de6896aabf6e9d55dca90356cc9960cca7eaaf408a355ae919"
-"checksum mongodb 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "f8cb54f85e6380c8cfe130a55a85cfc2584e8317f4bb8bda464d367fd4f24957"
+"checksum mongodb 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a726495d7418c4579ecc9465b53ddade8187c0299e5db0e7250672b67d196913"
 "checksum multitask 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c09c35271e7dcdb5f709779111f2c8e8ab8e06c1b587c1c6a9e179d865aaa5b4"
 "checksum net2 0.2.34 (registry+https://github.com/rust-lang/crates.io-index)" = "2ba7c918ac76704fb42afcbbb43891e72731f3dcca3bef2a19786297baf14af7"
 "checksum num-integer 0.1.43 (registry+https://github.com/rust-lang/crates.io-index)" = "8d59457e662d541ba17869cf51cf177c0b5f0cbf476c66bdc90bf1edac4f875b"
