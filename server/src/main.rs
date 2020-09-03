@@ -30,26 +30,34 @@ async fn graphql(
 async fn main() -> io::Result<()> {
     let collection = establish_mongodb_connection("stoodly", "post")
         .expect("expected 'post' collection in the 'stoodly' db");
+    let query_root = QueryRoot {
+        post_service: PostService {
+            repository: PostRepository {
+                collection: collection.clone(),
+            },
+        },
+    };
 
     env::set_var("RUST_LOG", "info");
     env_logger::init();
     HttpServer::new(move || {
-        let query_root = QueryRoot {
-            post_service: PostService {
-                repository: PostRepository {
-                    collection: collection.clone(),
-                },
-            },
-        };
-        let mutation_root = MutationRoot {
-            post_service: PostService {
-                repository: PostRepository {
-                    collection: collection.clone(),
-                },
-            },
-        };
         App::new()
-            .data(schema(query_root, mutation_root))
+            .data(schema(
+                QueryRoot {
+                    post_service: PostService {
+                        repository: PostRepository {
+                            collection: collection.clone(),
+                        },
+                    },
+                },
+                MutationRoot {
+                    post_service: PostService {
+                        repository: PostRepository {
+                            collection: collection.clone(),
+                        },
+                    },
+                },
+            ))
             .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
             .wrap(

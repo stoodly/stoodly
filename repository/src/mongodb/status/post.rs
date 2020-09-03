@@ -1,7 +1,9 @@
 use std::error::Error;
+use std::slice::Iter;
 
 use chrono::{TimeZone, Utc};
 use mongodb::bson::{doc, Bson, Document};
+use mongodb::sync::Cursor;
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
 
@@ -14,14 +16,13 @@ pub struct PostRepository {
 impl Repository for PostRepository {
     fn add(&self, post: Post) -> Result<Post, Box<dyn Error>> {
         let mut mut_post: Post = post.clone();
-        let id: &mut Uuid = mut_post.id.get_or_insert(Uuid::new_v4());
-        let upsert_enabled: bool = true;
+        let id: String = mut_post.id.get_or_insert(Uuid::new_v4()).to_string();
         self.collection.update_one(
             doc! {
-                "_id": &id.to_string()
+                "_id": &id
             },
             doc! {
-                "_id": &id.to_string(),
+                "_id": &id,
                 "user_id": mut_post.user_id.to_string(),
                 "team_id": mut_post.team_id.to_string(),
                 "yesterday": &mut_post.yesterday,
@@ -29,11 +30,7 @@ impl Repository for PostRepository {
                 "blocker": &mut_post.blocker,
                 "posted": mut_post.posted.timestamp_millis()
             },
-            Some(
-                UpdateOptions::builder()
-                    .upsert(Some(upsert_enabled))
-                    .build(),
-            ),
+            Some(UpdateOptions::builder().upsert(Some(true)).build()),
         )?;
         Ok(mut_post)
     }
@@ -46,6 +43,17 @@ impl Repository for PostRepository {
             Some(document) => Ok(Some(document_to_post(document)?)),
             None => Ok(None),
         }
+    }
+
+    fn find_all_by_team_id(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>> {
+        Ok(self
+            .collection
+            .find(doc! { "team_id": team_id.to_string() }, None)?
+            .into_iter()
+            .filter_map(Result::ok)
+            .map(document_to_post)
+            .filter_map(Result::ok)
+            .collect())
     }
 
     fn remove(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {

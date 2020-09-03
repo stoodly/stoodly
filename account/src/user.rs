@@ -11,7 +11,7 @@ pub struct User {
 }
 
 custom_error! {
-    pub UserError
+    pub ValidationError
     IdIsPresent = "The 'User' entity must not have a value set for the unique identifier.",
     IdIsNone = "The 'User' entity must have a unique identifier.",
     InvalidId = "The provided ID is invalid",
@@ -38,7 +38,7 @@ impl<R: Repository> Service for UserService<R> {
     fn create(&self, user: User) -> Result<User, Box<dyn Error>> {
         fn validate(user: User) -> Result<User, Box<dyn Error>> {
             if user.id.is_some() {
-                Err(UserError::IdIsPresent.into())
+                Err(ValidationError::IdIsPresent.into())
             } else {
                 Ok(user)
             }
@@ -50,7 +50,7 @@ impl<R: Repository> Service for UserService<R> {
     fn read(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>> {
         fn validate(id: Uuid) -> Result<Uuid, Box<dyn Error>> {
             if id.is_nil() {
-                Err(UserError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(id)
             }
@@ -62,9 +62,9 @@ impl<R: Repository> Service for UserService<R> {
     fn update(&self, user: User) -> Result<User, Box<dyn Error>> {
         fn validate(user: User) -> Result<User, Box<dyn Error>> {
             if user.id.is_none() {
-                Err(UserError::IdIsNone.into())
+                Err(ValidationError::IdIsNone.into())
             } else if user.id.ok_or("expected ID")?.is_nil() {
-                Err(UserError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(user)
             }
@@ -76,7 +76,7 @@ impl<R: Repository> Service for UserService<R> {
     fn delete(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>> {
         fn validate(id: Uuid) -> Result<Uuid, Box<dyn Error>> {
             if id.is_nil() {
-                Err(UserError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(id)
             }

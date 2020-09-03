@@ -24,7 +24,18 @@ impl Repository for PostRepository {
 
     fn find_by_id(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
         let collection: MutexGuard<Vec<Post>> = COLLECTION.lock().unwrap();
-        Ok(collection.iter().find(|post| post.id == Some(id)).cloned())
+        let post_opt: Option<Post> = collection.iter().find(|post| post.id == Some(id)).cloned();
+        Ok(post_opt)
+    }
+
+    fn find_all_by_team_id(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>> {
+        let collection: MutexGuard<Vec<Post>> = COLLECTION.lock().unwrap();
+        let filtered_posts: Vec<Post> = collection
+            .iter()
+            .filter(|post| post.team_id == team_id)
+            .map(|post| post.clone())
+            .collect();
+        Ok(filtered_posts)
     }
 
     fn remove(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {

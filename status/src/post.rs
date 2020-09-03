@@ -16,21 +16,24 @@ pub struct Post {
 }
 
 custom_error! {
-    pub PostError
+    pub ValidationError
     IdIsPresent = "The 'Post' entity must not have a value set for the unique identifier.",
     IdIsNone = "The 'Post' entity must have a unique identifier.",
-    InvalidId = "The provided ID is invalid",
+    InvalidId = "The provided 'id' is invalid",
+    InvalidTeamId = "The provided 'team_id' is invalid",
 }
 
 pub trait Repository {
     fn add(&self, post: Post) -> Result<Post, Box<dyn Error>>;
     fn find_by_id(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
+    fn find_all_by_team_id(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>>;
     fn remove(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
 }
 
 pub trait Service {
     fn create(&self, post: Post) -> Result<Post, Box<dyn Error>>;
     fn read(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
+    fn list(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>>;
     fn update(&self, post: Post) -> Result<Post, Box<dyn Error>>;
     fn delete(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
 }
@@ -43,7 +46,7 @@ impl<R: Repository> Service for PostService<R> {
     fn create(&self, post: Post) -> Result<Post, Box<dyn Error>> {
         fn validate(post: Post) -> Result<Post, Box<dyn Error>> {
             if post.id.is_some() {
-                Err(PostError::IdIsPresent.into())
+                Err(ValidationError::IdIsPresent.into())
             } else {
                 Ok(post)
             }
@@ -55,7 +58,7 @@ impl<R: Repository> Service for PostService<R> {
     fn read(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
         fn validate(id: Uuid) -> Result<Uuid, Box<dyn Error>> {
             if id.is_nil() {
-                Err(PostError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(id)
             }
@@ -64,12 +67,24 @@ impl<R: Repository> Service for PostService<R> {
         self.repository.find_by_id(validate(id)?)
     }
 
+    fn list(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>> {
+        fn validate(team_id: Uuid) -> Result<Uuid, Box<dyn Error>> {
+            if team_id.is_nil() {
+                Err(ValidationError::InvalidId.into())
+            } else {
+                Ok(team_id)
+            }
+        }
+
+        self.repository.find_all_by_team_id(validate(team_id)?)
+    }
+
     fn update(&self, post: Post) -> Result<Post, Box<dyn Error>> {
         fn validate(post: Post) -> Result<Post, Box<dyn Error>> {
             if post.id.is_none() {
-                Err(PostError::IdIsNone.into())
+                Err(ValidationError::IdIsNone.into())
             } else if post.id.ok_or("expected ID")?.is_nil() {
-                Err(PostError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(post)
             }
@@ -81,7 +96,7 @@ impl<R: Repository> Service for PostService<R> {
     fn delete(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>> {
         fn validate(id: Uuid) -> Result<Uuid, Box<dyn Error>> {
             if id.is_nil() {
-                Err(PostError::InvalidId.into())
+                Err(ValidationError::InvalidId.into())
             } else {
                 Ok(id)
             }
