@@ -1,20 +1,31 @@
 version: "3.8"
 services:
-  stoodly:
-    build: .
-    ports:
-      - "8080:8080"
-      - "80:80"
-    depends_on:
-      - mongodb
+#  stoodly:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#      - "80:80"
+#    depends_on:
+#      - mongodb
   mongodb:
     image: mongo:latest
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+      MONGO_INITDB_ROOT_PASSWORD: secret
     ports:
       - 27017:27017
     volumes:
       - mongodb_data:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: secret
+    depends_on:
+      - mongodb
+    ports:
+      - 8081:8081
 volumes:
   mongodb_data:

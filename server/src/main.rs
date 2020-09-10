@@ -41,8 +41,12 @@ async fn graphql(
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
-    let collection = establish_mongodb_connection("stoodly", "post")
+    let post_collection = establish_mongodb_connection("stoodly", "post")
         .expect("expected 'post' collection in the 'stoodly' db");
+    let user_collection = establish_mongodb_connection("stoodly", "user")
+        .expect("expected 'user' collection in the 'stoodly' db");
+    let team_collection = establish_mongodb_connection("stoodly", "team")
+        .expect("expected 'team' collection in the 'stoodly' db");
     env::set_var("RUST_LOG", "info");
     env_logger::init();
     HttpServer::new(move || {
@@ -52,17 +56,17 @@ async fn main() -> io::Result<()> {
                     status_service: StatusService {
                         post_service: PostService {
                             repository: PostRepository {
-                                collection: collection.clone(),
+                                collection: post_collection.clone(),
                             },
                         },
                         user_service: UserService {
                             repository: UserRepository {
-                                collection: collection.clone(),
+                                collection: user_collection.clone(),
                             },
                         },
                         team_service: TeamService {
                             repository: TeamRepository {
-                                collection: collection.clone(),
+                                collection: team_collection.clone(),
                             },
                         },
                     },
@@ -71,17 +75,17 @@ async fn main() -> io::Result<()> {
                     status_service: StatusService {
                         post_service: PostService {
                             repository: PostRepository {
-                                collection: collection.clone(),
+                                collection: post_collection.clone(),
                             },
                         },
                         user_service: UserService {
                             repository: UserRepository {
-                                collection: collection.clone(),
+                                collection: user_collection.clone(),
                             },
                         },
                         team_service: TeamService {
                             repository: TeamRepository {
-                                collection: collection.clone(),
+                                collection: team_collection.clone(),
                             },
                         },
                     },
