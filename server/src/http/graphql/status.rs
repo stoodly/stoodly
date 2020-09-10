@@ -1,8 +1,7 @@
 use chrono::{DateTime, Utc};
 use juniper::{GraphQLInputObject, GraphQLObject};
 use uuid::Uuid;
-
-use status::post::Post;
+use domain::status::post::Post;
 
 #[derive(GraphQLObject)]
 #[graphql(

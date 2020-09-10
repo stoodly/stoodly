@@ -1,9 +1,7 @@
 [workspace]
 members = [
+    "domain",
     "client",
     "server",
     "repository",
-    "status",
-    "account",
-    "organization",
 ]

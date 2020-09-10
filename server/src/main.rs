@@ -5,15 +5,15 @@ use actix_cors::Cors;
 use actix_web::{middleware, web, App, Error, HttpResponse, HttpServer};
 use juniper_actix::{graphiql_handler, graphql_handler, playground_handler};
 
-use account::user::UserService;
-use organization::team::TeamService;
 use repository::mongodb::account::user::UserRepository;
 use repository::mongodb::establish_mongodb_connection;
 use repository::mongodb::organization::team::TeamRepository;
 use repository::mongodb::status::post::PostRepository;
 use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
-use status::post::PostService;
-use status::StatusService;
+use domain::status::StatusService;
+use domain::status::post::PostService;
+use domain::account::user::UserService;
+use domain::organization::team::TeamService;
 
 async fn graphiql() -> Result<HttpResponse, Error> {
     graphiql_handler("/", None).await

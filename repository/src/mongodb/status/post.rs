@@ -4,8 +4,7 @@ use chrono::{TimeZone, Utc};
 use mongodb::bson::{doc, Bson, Document};
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
-
-use status::post::{Post, Repository};
+use domain::status::post::{Repository, Post};
 
 pub struct PostRepository {
     pub collection: Collection,

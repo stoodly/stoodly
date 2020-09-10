@@ -2,10 +2,9 @@ use custom_error::custom_error;
 use std::error::Error;
 use uuid::Uuid;
 
-use account::user::{Service as UserService, User};
-use organization::team::{Service as TeamService, Team};
-
-use crate::post::{Post, Service as PostService};
+use crate::status::post::{Post, Service as PostService};
+use crate::organization::team::{Team, Service as TeamService};
+use crate::account::user::{User, Service as UserService};
 
 pub mod post;
 

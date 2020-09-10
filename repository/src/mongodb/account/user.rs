@@ -3,8 +3,7 @@ use std::error::Error;
 use mongodb::bson::{doc, Bson, Document};
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
-
-use account::user::{Repository, User};
+use domain::account::user::{Repository, User};
 
 pub struct UserRepository {
     pub collection: Collection,
