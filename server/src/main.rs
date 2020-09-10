@@ -5,10 +5,15 @@ use actix_cors::Cors;
 use actix_web::{middleware, web, App, Error, HttpResponse, HttpServer};
 use juniper_actix::{graphiql_handler, graphql_handler, playground_handler};
 
+use account::user::UserService;
+use organization::team::TeamService;
+use repository::mongodb::account::user::UserRepository;
 use repository::mongodb::establish_mongodb_connection;
+use repository::mongodb::organization::team::TeamRepository;
 use repository::mongodb::status::post::PostRepository;
 use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
 use status::post::PostService;
+use status::StatusService;
 
 async fn graphiql() -> Result<HttpResponse, Error> {
     graphiql_handler("/", None).await
@@ -21,7 +26,15 @@ async fn playground() -> Result<HttpResponse, Error> {
 async fn graphql(
     req: actix_web::HttpRequest,
     payload: actix_web::web::Payload,
-    schema: web::Data<Schema<PostService<PostRepository>>>,
+    schema: web::Data<
+        Schema<
+            StatusService<
+                PostService<PostRepository>,
+                UserService<UserRepository>,
+                TeamService<TeamRepository>,
+            >,
+        >,
+    >,
 ) -> Result<HttpResponse, Error> {
     graphql_handler(&schema, &(), req, payload).await
 }
@@ -30,30 +43,46 @@ async fn graphql(
 async fn main() -> io::Result<()> {
     let collection = establish_mongodb_connection("stoodly", "post")
         .expect("expected 'post' collection in the 'stoodly' db");
-    let query_root = QueryRoot {
-        post_service: PostService {
-            repository: PostRepository {
-                collection: collection.clone(),
-            },
-        },
-    };
-
     env::set_var("RUST_LOG", "info");
     env_logger::init();
     HttpServer::new(move || {
         App::new()
             .data(schema(
                 QueryRoot {
-                    post_service: PostService {
-                        repository: PostRepository {
-                            collection: collection.clone(),
+                    status_service: StatusService {
+                        post_service: PostService {
+                            repository: PostRepository {
+                                collection: collection.clone(),
+                            },
+                        },
+                        user_service: UserService {
+                            repository: UserRepository {
+                                collection: collection.clone(),
+                            },
+                        },
+                        team_service: TeamService {
+                            repository: TeamRepository {
+                                collection: collection.clone(),
+                            },
                         },
                     },
                 },
                 MutationRoot {
-                    post_service: PostService {
-                        repository: PostRepository {
-                            collection: collection.clone(),
+                    status_service: StatusService {
+                        post_service: PostService {
+                            repository: PostRepository {
+                                collection: collection.clone(),
+                            },
+                        },
+                        user_service: UserService {
+                            repository: UserRepository {
+                                collection: collection.clone(),
+                            },
+                        },
+                        team_service: TeamService {
+                            repository: TeamRepository {
+                                collection: collection.clone(),
+                            },
                         },
                     },
                 },

@@ -7,6 +7,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+account = { path = "../account", version = "0.1.0" }
+organization = { path = "../organization", version = "0.1.0" }
 status = { path = "../status", version = "0.1.0" }
 uuid = { version = "0.8", features = ["serde", "v4"] }
 chrono = "0.4"

@@ -3,6 +3,7 @@ use std::error::Error;
 use mongodb::sync::{Client, Collection, Database};
 
 pub mod account;
+pub mod organization;
 pub mod status;
 
 pub fn establish_mongodb_connection(

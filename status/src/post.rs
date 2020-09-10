@@ -70,7 +70,7 @@ impl<R: Repository> Service for PostService<R> {
     fn list(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>> {
         fn validate(team_id: Uuid) -> Result<Uuid, Box<dyn Error>> {
             if team_id.is_nil() {
-                Err(ValidationError::InvalidId.into())
+                Err(ValidationError::InvalidTeamId.into())
             } else {
                 Ok(team_id)
             }

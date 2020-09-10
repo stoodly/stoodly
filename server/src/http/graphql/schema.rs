@@ -2,12 +2,13 @@ use juniper::RootNode;
 use juniper::{EmptySubscription, FieldResult};
 use uuid::Uuid;
 
-use status::post::{Post, Service};
+use status::post::Post;
+use status::Service;
 
 use crate::http::graphql::status::{NewPost, QueryPost, UpdatePost};
 
 pub struct QueryRoot<P: Service> {
-    pub post_service: P,
+    pub status_service: P,
 }
 
 #[juniper::graphql_object]
@@ -19,7 +20,7 @@ impl<P: Service> QueryRoot<P> {
                 None => None,
             }
         }
-        match self.post_service.read(id) {
+        match self.status_service.read(id, Uuid::new_v4()) {
             Ok(post_opt) => Ok(mk_query_post(post_opt)),
             Err(error) => Err(error)?,
         }
@@ -27,13 +28,16 @@ impl<P: Service> QueryRoot<P> {
 }
 
 pub struct MutationRoot<P: Service> {
-    pub post_service: P,
+    pub status_service: P,
 }
 
 #[juniper::graphql_object]
 impl<P: Service> MutationRoot<P> {
     fn create_post(&self, new_post: NewPost) -> FieldResult<QueryPost> {
-        match self.post_service.create(NewPost::from_new_post(&new_post)) {
+        match self
+            .status_service
+            .create(NewPost::from_new_post(&new_post), Uuid::new_v4())
+        {
             Ok(post) => Ok(QueryPost::from_post(post)),
             Err(error) => Err(error)?,
         }
@@ -41,8 +45,8 @@ impl<P: Service> MutationRoot<P> {
 
     fn update_post(&self, update_post: UpdatePost) -> FieldResult<QueryPost> {
         match self
-            .post_service
-            .update(UpdatePost::from_update_post(&update_post))
+            .status_service
+            .update(UpdatePost::from_update_post(&update_post), Uuid::new_v4())
         {
             Ok(post) => Ok(QueryPost::from_post(post)),
             Err(error) => Err(error)?,
@@ -56,7 +60,7 @@ impl<P: Service> MutationRoot<P> {
                 None => None,
             }
         }
-        match self.post_service.delete(id) {
+        match self.status_service.delete(id, Uuid::new_v4()) {
             Ok(post_opt) => Ok(mk_query_post(post_opt)),
             Err(error) => Err(error)?,
         }

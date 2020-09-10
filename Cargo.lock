@@ -1800,9 +1800,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 name = "repository"
 version = "0.1.0"
 dependencies = [
+ "account 0.1.0",
  "chrono 0.4.15 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "mongodb 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "organization 0.1.0",
  "status 0.1.0",
  "uuid 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]

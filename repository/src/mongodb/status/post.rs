@@ -1,9 +1,7 @@
 use std::error::Error;
-use std::slice::Iter;
 
 use chrono::{TimeZone, Utc};
 use mongodb::bson::{doc, Bson, Document};
-use mongodb::sync::Cursor;
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
 
@@ -69,11 +67,14 @@ impl Repository for PostRepository {
 }
 
 fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
-    let id: &str = document.get("_id").and_then(Bson::as_str).ok_or("_id")?;
+    let id: &str = document
+        .get("_id")
+        .and_then(Bson::as_str)
+        .ok_or("missing _id")?;
     let user_id: &str = document
         .get("user_id")
         .and_then(Bson::as_str)
-        .ok_or("user_id")?;
+        .ok_or("missing user_id")?;
     let team_id: &str = document
         .get("team_id")
         .and_then(Bson::as_str)
@@ -81,7 +82,7 @@ fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
     let yesterday: Vec<String> = document
         .get("yesterday")
         .and_then(Bson::as_array)
-        .ok_or("yesterday")?
+        .ok_or("missing yesterday")?
         .iter()
         .map(|bson| bson.as_str().map(|v| v.to_string()))
         .flatten()
@@ -89,7 +90,7 @@ fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
     let today: Vec<String> = document
         .get("today")
         .and_then(Bson::as_array)
-        .ok_or("today")?
+        .ok_or("missing today")?
         .iter()
         .map(|bson| bson.as_str().map(|v| v.to_string()))
         .flatten()
@@ -97,7 +98,7 @@ fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
     let blocker: Vec<String> = document
         .get("blocker")
         .and_then(Bson::as_array)
-        .ok_or("blocker")?
+        .ok_or("missing blocker")?
         .iter()
         .map(|bson| bson.as_str().map(|v| v.to_string()))
         .flatten()
@@ -105,7 +106,7 @@ fn document_to_post(document: Document) -> Result<Post, Box<dyn Error>> {
     let posted = document
         .get("posted")
         .and_then(Bson::as_i64)
-        .ok_or("posted")?;
+        .ok_or("missing posted")?;
     let post: Post = Post {
         id: Some(Uuid::parse_str(id)?),
         user_id: Uuid::parse_str(user_id)?,
