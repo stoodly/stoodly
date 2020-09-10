@@ -1,5 +1,5 @@
 [package]
-name = "repository"
+name = "application"
 version = "0.1.0"
 authors = ["Benjamin Jacob Berg <benjaminjacobberg@gmail.com>"]
 edition = "2018"
@@ -10,9 +10,7 @@ edition = "2018"
 domain = { path = "../domain", version = "0.1.0" }
 uuid = { version = "0.8", features = ["serde", "v4"] }
 chrono = "0.4"
-lazy_static = "1.4.0"
-
-[dependencies.mongodb]
-version = "1.1"
-default-features = false
-features = ["sync"]
+custom_error = "1.7.1"
+serde = "1.0.103"
+serde_json = "1.0.44"
+serde_derive = "1.0.103"

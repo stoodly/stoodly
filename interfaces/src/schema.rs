@@ -1,10 +1,11 @@
-use juniper::RootNode;
 use juniper::{EmptySubscription, FieldResult};
+use juniper::RootNode;
 use uuid::Uuid;
 
-use crate::http::graphql::status::{NewPost, QueryPost, UpdatePost};
-use domain::status::Service;
+use application::status::Service;
 use domain::status::post::Post;
+
+use crate::status::request::{NewPost, QueryPost, UpdatePost};
 
 pub struct QueryRoot<P: Service> {
     pub status_service: P,

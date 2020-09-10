@@ -2,42 +2,18 @@ use std::env;
 use std::io;
 
 use actix_cors::Cors;
-use actix_web::{middleware, web, App, Error, HttpResponse, HttpServer};
-use juniper_actix::{graphiql_handler, graphql_handler, playground_handler};
+use actix_web::{App, HttpServer, middleware, web};
 
-use repository::mongodb::account::user::UserRepository;
-use repository::mongodb::establish_mongodb_connection;
-use repository::mongodb::organization::team::TeamRepository;
-use repository::mongodb::status::post::PostRepository;
-use server::http::graphql::schema::{schema, MutationRoot, QueryRoot, Schema};
-use domain::status::StatusService;
-use domain::status::post::PostService;
-use domain::account::user::UserService;
-use domain::organization::team::TeamService;
-
-async fn graphiql() -> Result<HttpResponse, Error> {
-    graphiql_handler("/", None).await
-}
-
-async fn playground() -> Result<HttpResponse, Error> {
-    playground_handler("/", None).await
-}
-
-async fn graphql(
-    req: actix_web::HttpRequest,
-    payload: actix_web::web::Payload,
-    schema: web::Data<
-        Schema<
-            StatusService<
-                PostService<PostRepository>,
-                UserService<UserRepository>,
-                TeamService<TeamRepository>,
-            >,
-        >,
-    >,
-) -> Result<HttpResponse, Error> {
-    graphql_handler(&schema, &(), req, payload).await
-}
+use application::account::user::UserService;
+use application::organization::team::TeamService;
+use application::status::post::PostService;
+use application::status::StatusService;
+use infrastructure::mongodb::account::user::UserRepository;
+use infrastructure::mongodb::establish_mongodb_connection;
+use infrastructure::mongodb::organization::team::TeamRepository;
+use infrastructure::mongodb::status::post::PostRepository;
+use interfaces::handler::{graphiql, graphql, playground};
+use interfaces::schema::{MutationRoot, QueryRoot, schema};
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -108,7 +84,7 @@ async fn main() -> io::Result<()> {
             .service(web::resource("/playground").route(web::get().to(playground)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-    .bind("localhost:8080")?
-    .run()
-    .await
+        .bind("localhost:8080")?
+        .run()
+        .await
 }
