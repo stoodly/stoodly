@@ -1,5 +1,5 @@
-use juniper::{EmptySubscription, FieldResult};
 use juniper::RootNode;
+use juniper::{EmptySubscription, FieldResult};
 use uuid::Uuid;
 
 use application::status::Service;

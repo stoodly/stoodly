@@ -2,7 +2,7 @@ use std::env;
 use std::io;
 
 use actix_cors::Cors;
-use actix_web::{App, HttpServer, middleware, web};
+use actix_web::{middleware, web, App, HttpServer};
 
 use application::account::user::UserService;
 use application::organization::team::TeamService;
@@ -13,7 +13,7 @@ use infrastructure::mongodb::establish_mongodb_connection;
 use infrastructure::mongodb::organization::team::TeamRepository;
 use infrastructure::mongodb::status::post::PostRepository;
 use interfaces::handler::{graphiql, graphql, playground};
-use interfaces::schema::{MutationRoot, QueryRoot, schema};
+use interfaces::schema::{schema, MutationRoot, QueryRoot};
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -84,7 +84,7 @@ async fn main() -> io::Result<()> {
             .service(web::resource("/playground").route(web::get().to(playground)))
             .service(web::resource("/graphiql").route(web::get().to(graphiql)))
     })
-        .bind("localhost:8080")?
-        .run()
-        .await
+    .bind("localhost:8080")?
+    .run()
+    .await
 }

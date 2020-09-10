@@ -1,4 +1,4 @@
-use actix_web::{Error, HttpResponse, web};
+use actix_web::{web, Error, HttpResponse};
 use juniper_actix::{graphiql_handler, graphql_handler, playground_handler};
 
 use application::account::user::UserService;

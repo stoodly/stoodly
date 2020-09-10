@@ -1,9 +1,9 @@
 use std::error::Error;
 
+use domain::account::user::{Repository, User};
 use mongodb::bson::{doc, Bson, Document};
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
-use domain::account::user::{Repository, User};
 
 pub struct UserRepository {
     pub collection: Collection,

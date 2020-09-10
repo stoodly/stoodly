@@ -1,8 +1,8 @@
+use domain::status::post::{Post, Repository};
 use lazy_static::lazy_static;
 use std::error::Error;
 use std::sync::{Mutex, MutexGuard};
 use uuid::Uuid;
-use domain::status::post::{Repository, Post};
 
 lazy_static! {
     static ref COLLECTION: Mutex<Vec<Post>> = Mutex::new(vec![]);

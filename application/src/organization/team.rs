@@ -1,8 +1,7 @@
 use std::error::Error;
 
-use custom_error::custom_error;
+use domain::organization::team::{Repository, Team, ValidationError};
 use uuid::Uuid;
-use domain::organization::team::{Team, Repository, ValidationError};
 
 pub trait Service {
     fn create(&self, team: Team) -> Result<Team, Box<dyn Error>>;

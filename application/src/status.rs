@@ -1,12 +1,11 @@
 use std::error::Error;
 
-use custom_error::custom_error;
 use uuid::Uuid;
 
 use domain::account::user::User;
 use domain::organization::team::Team;
-use domain::status::{NotFoundError, SecurityError};
 use domain::status::post::Post;
+use domain::status::{NotFoundError, SecurityError};
 
 use crate::account::user::Service as UserService;
 use crate::organization::team::Service as TeamService;

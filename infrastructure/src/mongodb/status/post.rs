@@ -1,10 +1,10 @@
 use std::error::Error;
 
 use chrono::{TimeZone, Utc};
+use domain::status::post::{Post, Repository};
 use mongodb::bson::{doc, Bson, Document};
 use mongodb::{options::UpdateOptions, sync::Collection};
 use uuid::Uuid;
-use domain::status::post::{Repository, Post};
 
 pub struct PostRepository {
     pub collection: Collection,

@@ -1,9 +1,6 @@
-use chrono::DateTime;
-use chrono::Utc;
-use custom_error::custom_error;
+use domain::status::post::{Post, Repository, ValidationError};
 use std::error::Error;
 use uuid::Uuid;
-use domain::status::post::{Post, Repository, ValidationError};
 
 pub trait Service {
     fn create(&self, post: Post) -> Result<Post, Box<dyn Error>>;

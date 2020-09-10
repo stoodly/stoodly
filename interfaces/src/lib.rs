@@ -1,3 +1,3 @@
 pub mod handler;
-pub mod status;
 pub mod schema;
+pub mod status;

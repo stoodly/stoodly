@@ -1,8 +1,8 @@
+use domain::organization::team::{Repository, Team};
 use lazy_static::lazy_static;
 use std::error::Error;
 use std::sync::{Mutex, MutexGuard};
 use uuid::Uuid;
-use domain::organization::team::{Repository, Team};
 
 lazy_static! {
     static ref COLLECTION: Mutex<Vec<Team>> = Mutex::new(vec![]);

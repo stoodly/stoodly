@@ -1,8 +1,8 @@
+use domain::account::user::{Repository, User};
 use lazy_static::lazy_static;
 use std::error::Error;
 use std::sync::{Mutex, MutexGuard};
 use uuid::Uuid;
-use domain::account::user::{Repository, User};
 
 lazy_static! {
     static ref COLLECTION: Mutex<Vec<User>> = Mutex::new(vec![]);

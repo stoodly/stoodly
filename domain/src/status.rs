@@ -1,6 +1,4 @@
 use custom_error::custom_error;
-use std::error::Error;
-use uuid::Uuid;
 
 pub mod post;
 
