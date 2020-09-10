@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 application = { path = "../application", version = "0.1.0" }
-domain = { path = "../domain", version = "0.1.0" }
 infrastructure = { path = "../infrastructure", version = "0.1.0" }
 interfaces = { path = "../interfaces", version = "0.1.0" }
 uuid = { version = "0.8", features = ["serde", "v4"] }

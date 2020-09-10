@@ -1976,7 +1976,6 @@ dependencies = [
  "actix-rt 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 2.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "application 0.1.0",
- "domain 0.1.0",
  "env_logger 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "infrastructure 0.1.0",
  "interfaces 0.1.0",
