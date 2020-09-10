@@ -5,24 +5,6 @@ WARNING
 
 This project is under construction and is subject to my chaos that includes rebasing commit history and major refactoring. Once the MVP is done and deployed later this year, expect order and proper development behavior to ensue with the chaos coming to a complete stop.
 
-TODO
-----
-
-- [ ] Setup IDP, authentication, and read JWT into the service.
-
-- [x] Break out project into a multi-crate project.
-
-        Project:
-        * Stoodly        
-        Crates:
-        * client
-        * server 
-        * status 
-        * account 
-        * organization 
-
-- [ ] Update [README.md](README.md)
-
 SUMMARY
 -------
 
