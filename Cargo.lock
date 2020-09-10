@@ -1276,7 +1276,7 @@ dependencies = [
 [[package]]
 name = "juniper"
 version = "0.14.2"
-source = "git+https://github.com/graphql-rust/juniper#2ab00f55d620c51b8732c97c90f8f3349c2e6a0b"
+source = "git+https://github.com/graphql-rust/juniper#a4f4d24677ed465b0f5d99c75d957f7b1392c533"
 dependencies = [
  "bson 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.15 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1295,7 +1295,7 @@ dependencies = [
 [[package]]
 name = "juniper_actix"
 version = "0.1.0"
-source = "git+https://github.com/graphql-rust/juniper#2ab00f55d620c51b8732c97c90f8f3349c2e6a0b"
+source = "git+https://github.com/graphql-rust/juniper#a4f4d24677ed465b0f5d99c75d957f7b1392c533"
 dependencies = [
  "actix 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-rt 1.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1313,7 +1313,7 @@ dependencies = [
 [[package]]
 name = "juniper_codegen"
 version = "0.14.2"
-source = "git+https://github.com/graphql-rust/juniper#2ab00f55d620c51b8732c97c90f8f3349c2e6a0b"
+source = "git+https://github.com/graphql-rust/juniper#a4f4d24677ed465b0f5d99c75d957f7b1392c533"
 dependencies = [
  "proc-macro-error 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "proc-macro2 1.0.19 (registry+https://github.com/rust-lang/crates.io-index)",
