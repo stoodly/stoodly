@@ -1,8 +1,8 @@
 use lazy_static::lazy_static;
+use organization::team::{Repository, Team};
 use std::error::Error;
 use std::sync::{Mutex, MutexGuard};
 use uuid::Uuid;
-use organization::team::{Repository, Team};
 
 lazy_static! {
     static ref COLLECTION: Mutex<Vec<Team>> = Mutex::new(vec![]);
@@ -28,7 +28,10 @@ impl Repository for TeamRepository {
         Ok(team_opt)
     }
 
-    fn find_all_by_organization_id(&self, organization_id: Uuid) -> Result<Vec<Team>, Box<dyn Error>> {
+    fn find_all_by_organization_id(
+        &self,
+        organization_id: Uuid,
+    ) -> Result<Vec<Team>, Box<dyn Error>> {
         let collection: MutexGuard<Vec<Team>> = COLLECTION.lock().unwrap();
         let filtered_teams: Vec<Team> = collection
             .iter()
