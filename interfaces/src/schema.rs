@@ -1,9 +1,9 @@
-use juniper::RootNode;
 use juniper::{EmptySubscription, FieldResult};
+use juniper::RootNode;
 use uuid::Uuid;
 
-use application::status::Service;
 use domain::status::post::Post;
+use domain::status::Service;
 
 use crate::status::request::{NewPost, QueryPost, UpdatePost};
 

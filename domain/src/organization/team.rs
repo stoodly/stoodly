@@ -28,3 +28,11 @@ pub trait Repository {
     ) -> Result<Vec<Team>, Box<dyn Error>>;
     fn remove(&self, id: Uuid) -> Result<Option<Team>, Box<dyn Error>>;
 }
+
+pub trait Service {
+    fn create(&self, team: Team) -> Result<Team, Box<dyn Error>>;
+    fn read(&self, id: Uuid) -> Result<Option<Team>, Box<dyn Error>>;
+    fn list(&self, organization_id: Uuid) -> Result<Vec<Team>, Box<dyn Error>>;
+    fn update(&self, team: Team) -> Result<Team, Box<dyn Error>>;
+    fn delete(&self, id: Uuid) -> Result<Option<Team>, Box<dyn Error>>;
+}

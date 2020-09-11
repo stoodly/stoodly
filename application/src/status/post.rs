@@ -1,14 +1,6 @@
-use domain::status::post::{Post, Repository, ValidationError};
+use domain::status::post::{Post, Repository, ValidationError, Service};
 use std::error::Error;
 use uuid::Uuid;
-
-pub trait Service {
-    fn create(&self, post: Post) -> Result<Post, Box<dyn Error>>;
-    fn read(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
-    fn list(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>>;
-    fn update(&self, post: Post) -> Result<Post, Box<dyn Error>>;
-    fn delete(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
-}
 
 pub struct PostService<R: Repository> {
     pub repository: R,

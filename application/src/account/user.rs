@@ -1,13 +1,6 @@
-use domain::account::user::{Repository, User, ValidationError};
+use domain::account::user::{Repository, User, ValidationError, Service};
 use std::error::Error;
 use uuid::Uuid;
-
-pub trait Service {
-    fn create(&self, user: User) -> Result<User, Box<dyn Error>>;
-    fn read(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
-    fn update(&self, user: User) -> Result<User, Box<dyn Error>>;
-    fn delete(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
-}
 
 pub struct UserService<R: Repository> {
     pub repository: R,

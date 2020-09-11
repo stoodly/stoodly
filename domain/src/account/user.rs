@@ -22,3 +22,10 @@ pub trait Repository {
     fn find_by_id(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
     fn remove(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
 }
+
+pub trait Service {
+    fn create(&self, user: User) -> Result<User, Box<dyn Error>>;
+    fn read(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
+    fn update(&self, user: User) -> Result<User, Box<dyn Error>>;
+    fn delete(&self, id: Uuid) -> Result<Option<User>, Box<dyn Error>>;
+}

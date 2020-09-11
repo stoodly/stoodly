@@ -1,15 +1,7 @@
 use std::error::Error;
 
-use domain::organization::team::{Repository, Team, ValidationError};
+use domain::organization::team::{Repository, Team, ValidationError, Service};
 use uuid::Uuid;
-
-pub trait Service {
-    fn create(&self, team: Team) -> Result<Team, Box<dyn Error>>;
-    fn read(&self, id: Uuid) -> Result<Option<Team>, Box<dyn Error>>;
-    fn list(&self, organization_id: Uuid) -> Result<Vec<Team>, Box<dyn Error>>;
-    fn update(&self, team: Team) -> Result<Team, Box<dyn Error>>;
-    fn delete(&self, id: Uuid) -> Result<Option<Team>, Box<dyn Error>>;
-}
 
 pub struct TeamService<R: Repository> {
     pub repository: R,

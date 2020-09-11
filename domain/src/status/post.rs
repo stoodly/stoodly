@@ -29,3 +29,11 @@ pub trait Repository {
     fn find_all_by_team_id(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>>;
     fn remove(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
 }
+
+pub trait Service {
+    fn create(&self, post: Post) -> Result<Post, Box<dyn Error>>;
+    fn read(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
+    fn list(&self, team_id: Uuid) -> Result<Vec<Post>, Box<dyn Error>>;
+    fn update(&self, post: Post) -> Result<Post, Box<dyn Error>>;
+    fn delete(&self, id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
+}

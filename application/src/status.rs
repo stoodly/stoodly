@@ -2,23 +2,15 @@ use std::error::Error;
 
 use uuid::Uuid;
 
+use domain::account::user::Service as UserService;
 use domain::account::user::User;
+use domain::organization::team::Service as TeamService;
 use domain::organization::team::Team;
+use domain::status::{NotFoundError, SecurityError, Service};
 use domain::status::post::Post;
-use domain::status::{NotFoundError, SecurityError};
-
-use crate::account::user::Service as UserService;
-use crate::organization::team::Service as TeamService;
-use crate::status::post::Service as PostService;
+use domain::status::post::Service as PostService;
 
 pub mod post;
-
-pub trait Service {
-    fn create(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>>;
-    fn read(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
-    fn update(&self, post: Post, user_id: Uuid) -> Result<Post, Box<dyn Error>>;
-    fn delete(&self, id: Uuid, user_id: Uuid) -> Result<Option<Post>, Box<dyn Error>>;
-}
 
 pub struct StatusService<P: PostService, U: UserService, T: TeamService> {
     pub post_service: P,
