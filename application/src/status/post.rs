@@ -1,4 +1,4 @@
-use domain::status::post::{Post, Repository, ValidationError, Service};
+use domain::status::post::{Post, Repository, Service, ValidationError};
 use std::error::Error;
 use uuid::Uuid;
 

@@ -1,6 +1,6 @@
 use std::error::Error;
 
-use domain::organization::team::{Repository, Team, ValidationError, Service};
+use domain::organization::team::{Repository, Service, Team, ValidationError};
 use uuid::Uuid;
 
 pub struct TeamService<R: Repository> {

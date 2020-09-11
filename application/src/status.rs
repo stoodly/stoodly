@@ -6,9 +6,9 @@ use domain::account::user::Service as UserService;
 use domain::account::user::User;
 use domain::organization::team::Service as TeamService;
 use domain::organization::team::Team;
-use domain::status::{NotFoundError, SecurityError, Service};
 use domain::status::post::Post;
 use domain::status::post::Service as PostService;
+use domain::status::{NotFoundError, SecurityError, Service};
 
 pub mod post;
 

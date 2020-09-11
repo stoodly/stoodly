@@ -1,4 +1,4 @@
-use domain::account::user::{Repository, User, ValidationError, Service};
+use domain::account::user::{Repository, Service, User, ValidationError};
 use std::error::Error;
 use uuid::Uuid;
 
