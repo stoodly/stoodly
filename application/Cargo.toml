@@ -10,4 +10,4 @@ edition = "2018"
 domain = { path = "../domain", version = "0.1.0" }
 uuid = { version = "0.8", features = ["serde", "v4"] }
 chrono = "0.4"
-custom_error = "1.7.1"
+custom_error = "1.8.0"
