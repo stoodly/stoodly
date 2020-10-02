@@ -10,7 +10,7 @@ edition = "2018"
 application = { path = "../application", version = "0.1.0" }
 domain = { path = "../domain", version = "0.1.0" }
 infrastructure = { path = "../infrastructure", version = "0.1.0" }
-actix-web = "2.0.0"
+actix-web = "3.1.0"
 chrono = "0.4"
 uuid = { version = "0.8", features = ["serde", "v4"] }
 
